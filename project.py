@@ -91,20 +91,19 @@ def openfile(): #make a new file(csv) with custom name
     global fieldname
     filename = input("Please name your csv file: ")
 
-    #catch input
-    try:
-        #re.match to ensure only give alphabets, no special character
-        with open(f"{filename}.csv", "x", newline="") as file:
-            writer = csv.DictWriter(file, fieldnames=fieldname)
-            writer.writeheader()
+    if re.match(r"^[\w.+]$", filename, re.IGNORECASE):
+        try:
+            with open(f"{filename}.csv", "x", newline="") as file:
+                writer = csv.DictWriter(file, fieldnames=fieldname)
+                writer.writeheader()
 
-    #return for testing
-    except FileExistsError:
-        return("File already exist.\n")
-    
-    #return for testing
+        except FileExistsError:
+            return("File already exist.\n")
+        
+        else:
+            return(f"File {filename}.csv is created.\n")
     else:
-        return(f"File {filename}.csv is created.\n")
+        return("Invalid file name.\n")
 
 def choosefile():
     count = 0
@@ -116,12 +115,11 @@ def choosefile():
     choice = int(input())
     return files[choice-1]
 
-def dltrec(file):
+def dltrec(f):
     global fieldname
     read = []
 
-    #read file (have to make it to read what files do i have.)
-    with open(f"{file}") as file:
+    with open(f"{f}") as file:
         count = 0
         reader = csv.DictReader(file)
         for row in reader:
@@ -142,18 +140,17 @@ def dltrec(file):
         print("Please only input numbers (0-9)!")
 
     #rewrite deleted version into the file
-    with open(f"{file}", "w", newline="") as file:
+    with open(f"{f}", "w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=fieldname)
         writer.writeheader()
         for i in read:
             writer.writerow({"Item":i["Item"], "Price":i["Price"]})
 
 
-def rec(file): #record 
+def rec(f): #record 
     global fieldname
 
-    #read file (have to make it to read what files do i have.)
-    with open(f"{file}", "a", newline="") as file:
+    with open(f"{f}", "a", newline="") as file:
         while True:
             item = input("Item: ")
 
