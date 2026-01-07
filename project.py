@@ -103,9 +103,6 @@ def openfile(): #make a new file(csv) with custom name
 def choosefile():
     files = []
     file = ...
-    '''
-    Testing testing 123
-    '''
     return file
 
 def dltrec(file):
