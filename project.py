@@ -78,7 +78,13 @@ def main():
                     print("Thats not a valid choice! Please choose 1-4!")
 
         except ValueError:
-            print("Please input integer 1 - 4\n")
+            print("Please select the choices given!\n")
+        
+        except IndexError:
+            print("Please only select the choice given!")
+
+        except TypeError:
+            print("Please only input numbers (0-9)!")
 
 
 def openfile(): #make a new file(csv) with custom name
@@ -101,9 +107,14 @@ def openfile(): #make a new file(csv) with custom name
         return(f"File {filename}.csv is created.\n")
 
 def choosefile():
-    files = []
-    file = ...
-    return file
+    count = 0
+    files = os.listdir("C:\\Desktop\\Personal Code\\Spendings")
+    for file in files:
+        count += 1
+        print(f"{count}. {file}")
+
+    choice = int(input())
+    return files[choice-1]
 
 def dltrec(file):
     global fieldname
@@ -111,8 +122,8 @@ def dltrec(file):
 
     #read file (have to make it to read what files do i have.)
     with open(f"{file}") as file:
-        reader = csv.DictReader(file)
         count = 0
+        reader = csv.DictReader(file)
         for row in reader:
             count += 1
             read.append({"No": count, "Item": row["Item"], "Price": row["Price"]})
@@ -127,6 +138,8 @@ def dltrec(file):
         read.pop((dlt-1))
     except IndexError:
         print("Please only delete what you have!")
+    except TypeError:
+        print("Please only input numbers (0-9)!")
 
     #rewrite deleted version into the file
     with open(f"{file}", "w", newline="") as file:
