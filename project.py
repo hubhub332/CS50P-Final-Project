@@ -39,6 +39,7 @@ import sys
 import csv
 import re
 import os
+import time
 import datetime
 
 try:
@@ -159,10 +160,10 @@ def rec(f): #record
                 break
             else:
                 price = input("Price: RM")
-                time = datetime.date.today()
+                time = datetime.date.today().strftime("%A, %d %B %Y")
                 writer = csv.DictWriter(file, fieldnames=fieldname)
                 writer.writerow({"Item": item, "Price": f"RM{price}", "Time": time})
 
-#run4
+#run
 if __name__ == "__main__":
     main()
