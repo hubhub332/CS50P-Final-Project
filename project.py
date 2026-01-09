@@ -39,6 +39,7 @@ import sys
 import csv
 import re
 import os
+import datetime
 
 try:
     os.mkdir("C:\\Desktop\\Personal Code\\Spendings")
@@ -46,7 +47,7 @@ except FileExistsError:
     ...
 
 
-fieldname = ["Item", "Price"]
+fieldname = ["Item", "Price", "Time"]
 
 def main():
     while True:
@@ -91,7 +92,7 @@ def openfile(): #make a new file(csv) with custom name
     global fieldname
     filename = input("Please name your csv file: ")
 
-    if re.match(r"^[\w.+]$", filename, re.IGNORECASE):
+    if re.match(r"[\w.+]", filename, re.IGNORECASE):
         try:
             with open(f"{filename}.csv", "x", newline="") as file:
                 writer = csv.DictWriter(file, fieldnames=fieldname)
@@ -124,7 +125,7 @@ def dltrec(f):
         reader = csv.DictReader(file)
         for row in reader:
             count += 1
-            read.append({"No": count, "Item": row["Item"], "Price": row["Price"]})
+            read.append({"No": count, "Item": row["Item"], "Price": row["Price"], "Time": row["Time"]})
 
     #show what to delete
     for r in read:
@@ -144,7 +145,7 @@ def dltrec(f):
         writer = csv.DictWriter(file, fieldnames=fieldname)
         writer.writeheader()
         for i in read:
-            writer.writerow({"Item":i["Item"], "Price":i["Price"]})
+            writer.writerow({"Item":i["Item"], "Price":i["Price"], "Time":i["Time"]})
 
 
 def rec(f): #record 
@@ -157,10 +158,11 @@ def rec(f): #record
             if item == "":
                 break
             else:
-                price = input("Price: ")
+                price = input("Price: RM")
+                time = datetime.date.today()
                 writer = csv.DictWriter(file, fieldnames=fieldname)
-                writer.writerow({"Item": item, "Price": price})
+                writer.writerow({"Item": item, "Price": f"RM{price}", "Time": time})
 
-#run
+#run4
 if __name__ == "__main__":
     main()
