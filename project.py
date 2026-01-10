@@ -55,8 +55,9 @@ def main():
         try:
             print("1. Add Records")
             print("2. Delete Records")
-            print("3. Add File")
-            print("4. Exit Program")
+            print("3. Sort Records")
+            print("4. Add File")
+            print("5. Exit Program")
 
             choice = int(input())
 
@@ -70,10 +71,14 @@ def main():
                     dltrec(file)
 
                 case 3:
+                    file = choosefile()
+                    print(sorting(file))
+
+                case 4:
                     outcome = openfile()
                     print(outcome)
 
-                case 4:
+                case 5:
                     sys.exit("See you next time")
 
                 case _:
@@ -116,6 +121,36 @@ def choosefile():
 
     choice = int(input())
     return files[choice-1]
+
+def sorting(f):
+    global fieldname
+    read = []
+    try:
+        sortitem = int(input("1. Item Name\n2. Price\n3. Time\n"))
+        match sortitem:
+            case 1:
+                item = "Item"
+            case 2:
+                item = "Price"
+            case 3:
+                item = "Time"
+            case _:
+                return None
+    except TypeError:
+        ...
+    
+    with open (f"{f}") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            read.append({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+
+    with open(f"{f}", "w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=fieldname)
+        writer.writeheader()
+        for row in sorted(read, key = lambda row: row[item]):   
+            writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+
+    return (f"{f} is sorted according to {item}")
 
 def dltrec(f):
     global fieldname
