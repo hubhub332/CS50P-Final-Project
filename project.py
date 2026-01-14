@@ -125,32 +125,72 @@ def choosefile():
 def sorting(f):
     global fieldname
     read = []
-    try:
-        sortitem = int(input("1. Item Name\n2. Price\n3. Time\n"))
-        match sortitem:
-            case 1:
-                item = "Item"
-            case 2:
-                item = "Price"
-            case 3:
-                item = "Time"
-            case _:
-                return None
-    except TypeError:
-        ...
-    
     with open (f"{f}") as file:
         reader = csv.DictReader(file)
         for row in reader:
             read.append({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
 
-    with open(f"{f}", "w", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldname)
-        writer.writeheader()
-        for row in sorted(read, key = lambda row: row[item]):   
-            writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+    try:
+        sortitem = int(input("1. Item Name\n2. Price\n3. Time\n"))
+        match sortitem:
+            case 1:
+                item = "Item Name"
+                with open(f"{f}", "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldname)
+                    writer.writeheader()
+                    for row in sorted(read, key = lambda row: row["Item"]):   
+                        writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+                 
+            case 2:
+                item = "Price"
+                result = merge_sort(read)
+                with open(f"{f}", "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldname)
+                    writer.writeheader()
+                    for row in result:   
+                        writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+            case 3:
+                item = "Time"
 
-    return (f"{f} is sorted according to {item}")
+            case _:
+                return None
+            
+    except TypeError:
+        ...
+
+    else:
+        return (f"{f} is sorted according to {item}")
+
+def merge_sort(L):
+    if len(L) == 1:
+        return L
+
+    mid = len(L)//2
+    left = L[:mid]
+    right = L[mid:]
+
+    left_sorted = merge_sort(left)
+    right_sorted = merge_sort(right)
+
+    return merge(left_sorted, right_sorted)
+
+def merge(left, right):
+    i = 0
+    j = 0
+    result = []
+    while i < len(left) and j < len(right):
+        price_left  = int(left[i]["Price"].strip()[2:])
+        price_right = int(right[j]["Price"].strip()[2:])
+        if price_left <= price_right:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+
+    return result
 
 def dltrec(f):
     global fieldname
