@@ -41,6 +41,7 @@ import re
 import os
 import time
 import datetime
+from datetime import date
 
 try:
     os.mkdir("C:\\Desktop\\Personal Code\\Spendings")
@@ -151,6 +152,11 @@ def sorting(f):
                         writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
             case 3:
                 item = "Time"
+                with open(f"{f}", "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=fieldname)
+                    writer.writeheader()
+                    for row in sorted(read, key = lambda row: datetime.datetime.strptime(f"{row['Time']}", '%A, %d %B %Y')): 
+                        writer.writerow({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
 
             case _:
                 return None
