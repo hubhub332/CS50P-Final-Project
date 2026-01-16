@@ -40,16 +40,12 @@ def main():
                 case 4:
                     f = choosefile()
                     read = []
-                    total = 0
                     with open (f"{f}") as file:
                         reader = csv.DictReader(file)
                         for row in reader:
                             read.append({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
-                    
-                    for row in read:
-                        total += int(row["Price"].strip()[2:])
 
-                    print(f"Total spendings recorded in {f} is RM{total}\n")
+                    print(f"Total spendings recorded in {f} is RM{counttotal(read)}\n")
 
                 case 5:
                     outcome = openfile()
@@ -161,8 +157,8 @@ def merge(left, right):
     j = 0
     result = []
     while i < len(left) and j < len(right):
-        price_left  = int(left[i]["Price"].strip()[2:])
-        price_right = int(right[j]["Price"].strip()[2:])
+        price_left = priceparse(left[i]["Price"])
+        price_right = priceparse(right[j]["Price"])
         if price_left <= price_right:
             result.append(left[i])
             i += 1
@@ -217,6 +213,16 @@ def rec(f):
                 time = datetime.date.today().strftime("%A, %d %B %Y")
                 writer = csv.DictWriter(file, fieldnames=fieldname)
                 writer.writerow({"Item": item, "Price": f"RM{price}", "Time": time})
+
+def counttotal(r):
+    total = 0
+    for row in r:
+        total += priceparse(row["Price"])
+
+    return total
+
+def priceparse(x):
+    return int(x.strip()[2:])
 
 if __name__ == "__main__":
     main()
