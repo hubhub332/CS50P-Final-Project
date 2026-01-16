@@ -39,9 +39,7 @@ import sys
 import csv
 import re
 import os
-import time
 import datetime
-from datetime import date
 
 try:
     os.mkdir("C:\\Desktop\\Personal Code\\Spendings")
@@ -57,8 +55,9 @@ def main():
             print("1. Add Records")
             print("2. Delete Records")
             print("3. Sort Records")
-            print("4. Add File")
-            print("5. Exit Program")
+            print("4. Total")
+            print("5. Add File")
+            print("6. Exit Program")
 
             choice = int(input())
 
@@ -76,11 +75,25 @@ def main():
                     print(sorting(file))
 
                 case 4:
+                    f = choosefile()
+                    read = []
+                    total = 0
+                    with open (f"{f}") as file:
+                        reader = csv.DictReader(file)
+                        for row in reader:
+                            read.append({"Item":row["Item"], "Price":row["Price"], "Time":row["Time"]})
+                    
+                    for row in read:
+                        total += int(row["Price"].strip()[2:])
+
+                    print(f"Total spendings recorded in {f} is RM{total}\n")
+
+                case 5:
                     outcome = openfile()
                     print(outcome)
 
-                case 5:
-                    sys.exit("See you next time")
+                case 6:
+                    sys.exit("\nSee you next time")
 
                 case _:
                     print("Thats not a valid choice! Please choose 1-4!")
