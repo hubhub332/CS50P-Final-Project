@@ -1,40 +1,3 @@
-'''
-dictreader, rec spendings as dictionary
-delete object (add serial code or number to dlt, or with dictionary["name"] if possible)
-add file
-
-Menu
-1. Add Rec >> choice of file >> add (item, price, time rec)
-2. Dlt Rec >> choice of file >> choose which to dlt
-3. Add File >> choose csv or txt >> type file name
-4. Exit Program
-
-
-sort (choice) ex: sort item sort price
-can count total
-
-item price time
-'''
-# rec = []
-# while True:
-#     item = input("Item: ")
-
-#     if item == "":
-#         break
-
-#     else:
-#         price = input("Price: RM")
-#         a = {"Item":item, "Price":price}
-#         rec.append(a)
-
-
-
-
-# with open("Rec.txt", "a") as f:
-#     for i in rec:
-#         f.write(f"Item: {i['Item']}, Price: RM{i['Price']}\n")
-
-
 import sys
 import csv
 import re
@@ -108,7 +71,7 @@ def main():
             print("Please only input numbers (0-9)!")
 
 
-def openfile(): #make a new file(csv) with custom name
+def openfile():
     global fieldname
     filename = input("Please name your csv file: ")
 
@@ -222,11 +185,9 @@ def dltrec(f):
             count += 1
             read.append({"No": count, "Item": row["Item"], "Price": row["Price"], "Time": row["Time"]})
 
-    #show what to delete
     for r in read:
         print(r)
 
-    #catch input error
     try:
         dlt = int(input("Choose what No. to delete: "))
         read.pop((dlt-1))
@@ -235,7 +196,6 @@ def dltrec(f):
     except TypeError:
         print("Please only input numbers (0-9)!")
 
-    #rewrite deleted version into the file
     with open(f"{f}", "w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=fieldname)
         writer.writeheader()
@@ -243,7 +203,7 @@ def dltrec(f):
             writer.writerow({"Item":i["Item"], "Price":i["Price"], "Time":i["Time"]})
 
 
-def rec(f): #record 
+def rec(f):  
     global fieldname
 
     with open(f"{f}", "a", newline="") as file:
@@ -258,6 +218,5 @@ def rec(f): #record
                 writer = csv.DictWriter(file, fieldnames=fieldname)
                 writer.writerow({"Item": item, "Price": f"RM{price}", "Time": time})
 
-#run
 if __name__ == "__main__":
     main()
